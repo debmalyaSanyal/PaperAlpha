@@ -60,7 +60,7 @@ export class RedisJobQueue implements JobQueue {
       // `ioredis` is an optional peer: resolved at runtime so that the default
       // database driver never pulls it in, and so the dependency stays
       // genuinely optional for local development.
-      const nodeRequire = createRequire(path.join(process.cwd(), "package.json"));
+      const nodeRequire = createRequire(import.meta.url);
       const factory = nodeRequire("ioredis") as new (url: string) => RedisLike;
       this.client = new factory(this.options.url);
       return this.client;

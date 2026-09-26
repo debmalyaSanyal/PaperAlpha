@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  serverExternalPackages: ["@prisma/client", "prisma"],
+  serverExternalPackages: ["@prisma/client", "prisma", "ioredis"],
   experimental: {
     // Uploaded research material (notebooks, PDFs, datasets) is posted to
     // route handlers via multipart/form-data.
