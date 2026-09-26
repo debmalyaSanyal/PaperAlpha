@@ -3,7 +3,6 @@
   publish = ".next"
 
 [build.environment]
-  NODE_ENV = "development"
   NPM_FLAGS = "--include=dev"
 
 [[plugins]]
