@@ -1,0 +1,175 @@
+{
+  "$comment": "Shared defaults for every paper format. Venue files (ieee.json, springer.json, ...) override only the keys that differ. Loaded and deep-merged by lib/formats/loader.ts. Units: inches / points unless stated otherwise.",
+  "id": "_base",
+  "name": "Generic",
+  "description": "Format-neutral defaults. Not selectable by users directly.",
+  "page": {
+    "size": "A4",
+    "widthInches": 8.27,
+    "heightInches": 11.69,
+    "orientation": "portrait",
+    "columns": 1,
+    "columnSpacingInches": 0.25
+  },
+  "margins": {
+    "top": 1.0,
+    "bottom": 1.0,
+    "left": 1.0,
+    "right": 1.0,
+    "gutter": 0.0
+  },
+  "typography": {
+    "fontFamily": "Times New Roman",
+    "bodyFontSize": 11,
+    "titleFontSize": 18,
+    "authorFontSize": 11,
+    "abstractFontSize": 10,
+    "lineSpacing": 1.15,
+    "paragraphSpacingBeforePt": 0,
+    "paragraphSpacingAfterPt": 6,
+    "firstLineIndentInches": 0.0,
+    "justify": true
+  },
+  "title": {
+    "fontSize": 18,
+    "bold": true,
+    "alignment": "center",
+    "textCase": "title_case",
+    "spacingAfterPt": 12
+  },
+  "authors": {
+    "fontSize": 11,
+    "alignment": "center",
+    "includeAffiliations": true,
+    "spacingAfterPt": 12
+  },
+  "abstract": {
+    "headingText": "Abstract",
+    "headingNumbered": false,
+    "headingBold": true,
+    "headingItalic": false,
+    "bodyBold": false,
+    "fontSize": 10,
+    "justify": true,
+    "maxWords": 250
+  },
+  "keywords": {
+    "headingText": "Keywords",
+    "headingInSameParagraph": true,
+    "headingItalic": true,
+    "headingBold": true,
+    "separator": ", ",
+    "maxCount": 6
+  },
+  "headings": {
+    "numberingEnabled": true,
+    "level1": {
+      "fontSize": 12,
+      "bold": true,
+      "italic": false,
+      "uppercase": false,
+      "smallCaps": false,
+      "alignment": "left",
+      "numbering": "arabic",
+      "numberSeparator": ". ",
+      "numberingSuffix": "",
+      "spacingBeforePt": 12,
+      "spacingAfterPt": 6,
+      "pageBreakBefore": false
+    },
+    "level2": {
+      "fontSize": 11,
+      "bold": true,
+      "italic": false,
+      "alignment": "left",
+      "numbering": "arabic_dotted",
+      "numberSeparator": " ",
+      "numberingSuffix": "",
+      "spacingBeforePt": 10,
+      "spacingAfterPt": 4
+    },
+    "level3": {
+      "fontSize": 11,
+      "bold": false,
+      "italic": true,
+      "alignment": "left",
+      "numbering": "arabic_dotted",
+      "numberSeparator": " ",
+      "numberingSuffix": "",
+      "spacingBeforePt": 8,
+      "spacingAfterPt": 4
+    }
+  },
+  "references": {
+    "headingText": "References",
+    "headingNumbered": false,
+    "fontSize": 10,
+    "hangingIndentInches": 0.25,
+    "sortOrder": "citation_order",
+    "labelFormat": "[{n}]",
+    "style": "IEEE",
+    "pageBreakBefore": false
+  },
+  "figures": {
+    "captionPosition": "below",
+    "labelFormat": "Figure {n}.",
+    "fontSize": 9,
+    "captionBold": false,
+    "captionItalic": false,
+    "centered": true,
+    "maxWidthInches": 6.5
+  },
+  "tables": {
+    "captionPosition": "above",
+    "labelFormat": "Table {n}.",
+    "fontSize": 9,
+    "captionBold": false,
+    "captionItalic": false,
+    "centered": true,
+    "borderStyle": "grid",
+    "headerBold": true
+  },
+  "equations": {
+    "fontFamily": "Cambria Math",
+    "fontSize": 11,
+    "numbering": "none",
+    "numberLabelFormat": "({n})",
+    "centered": true
+  },
+  "pageNumbers": {
+    "enabled": false,
+    "position": "footer",
+    "alignment": "center",
+    "format": "{n}"
+  },
+  "header": {
+    "enabled": false,
+    "text": ""
+  },
+  "outline": {
+    "$comment": "Ordered canonical section keys. `weight` is the default share of the total content budget before page-format adjustment.",
+    "sections": [
+      { "key": "abstract", "title": "Abstract", "level": 1, "kind": "abstract", "required": true, "weight": 0.05 },
+      { "key": "keywords", "title": "Keywords", "level": 1, "kind": "keywords", "required": true, "weight": 0.0 },
+      { "key": "introduction", "title": "Introduction", "level": 1, "kind": "body", "required": true, "weight": 0.12 },
+      { "key": "related_work", "title": "Related Work", "level": 1, "kind": "body", "required": true, "weight": 0.18 },
+      { "key": "research_gap", "title": "Research Gap", "level": 1, "kind": "body", "required": false, "weight": 0.05 },
+      { "key": "methodology", "title": "Methodology", "level": 1, "kind": "body", "required": true, "weight": 0.25 },
+      { "key": "dataset", "title": "Dataset and Preprocessing", "level": 2, "kind": "body", "required": false, "weight": 0.0 },
+      { "key": "experimental_setup", "title": "Experimental Setup", "level": 1, "kind": "body", "required": true, "weight": 0.08 },
+      { "key": "results", "title": "Results", "level": 1, "kind": "body", "required": true, "weight": 0.12 },
+      { "key": "ablation", "title": "Ablation Study", "level": 1, "kind": "body", "required": false, "weight": 0.05 },
+      { "key": "discussion", "title": "Discussion", "level": 1, "kind": "body", "required": true, "weight": 0.08 },
+      { "key": "limitations", "title": "Limitations", "level": 1, "kind": "body", "required": false, "weight": 0.03 },
+      { "key": "conclusion", "title": "Conclusion", "level": 1, "kind": "body", "required": true, "weight": 0.05 },
+      { "key": "future_work", "title": "Future Work", "level": 2, "kind": "body", "required": false, "weight": 0.0 },
+      { "key": "references", "title": "References", "level": 1, "kind": "references", "required": true, "weight": 0.0 }
+    ]
+  },
+  "citationStyle": "IEEE",
+  "wordsPerPage": {
+    "$comment": "Calibration used by the page-budget estimator: words per full page of pure body text at this format's font size, line spacing and column count.",
+    "singleColumn": 500,
+    "twoColumn": 900
+  }
+}

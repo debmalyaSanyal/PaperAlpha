@@ -1,0 +1,54 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+
+# production
+/build
+
+# env
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# database (local sqlite)
+*.db
+*.db-journal
+prisma/dev.db
+
+# storage (local driver)
+/.storage/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+backend/.env
+
+# generated artifacts / agent state
+/project/
+/artifacts/
+/generated/
+
+# editor / os
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# logs / coverage
+*.log
+coverage/
+.vitest/

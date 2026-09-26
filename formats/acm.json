@@ -1,0 +1,42 @@
+{
+  "id": "acm",
+  "name": "ACM",
+  "description": "ACM conference proceedings style: US Letter, two columns, 9pt Linux Libertine-equivalent serif, decimal headings, bracketed numeric citations.",
+  "page": { "size": "Letter", "widthInches": 8.5, "heightInches": 11.0, "columns": 2, "columnSpacingInches": 0.25 },
+  "margins": { "top": 0.75, "bottom": 1.0, "left": 0.75, "right": 0.75 },
+  "typography": {
+    "bodyFontSize": 9,
+    "titleFontSize": 18,
+    "authorFontSize": 11,
+    "abstractFontSize": 9,
+    "lineSpacing": 1.0,
+    "paragraphSpacingAfterPt": 0,
+    "firstLineIndentInches": 0.15
+  },
+  "title": { "fontSize": 18, "bold": true, "alignment": "left", "textCase": "title_case" },
+  "authors": { "fontSize": 11, "alignment": "left", "includeAffiliations": true },
+  "abstract": {
+    "headingText": "ABSTRACT",
+    "headingNumbered": false,
+    "headingBold": true,
+    "headingItalic": false,
+    "bodyBold": false,
+    "fontSize": 9,
+    "justify": true,
+    "maxWords": 250
+  },
+  "keywords": { "headingText": "CCS Concepts", "headingInSameParagraph": false, "headingItalic": false, "headingBold": true, "separator": ", ", "maxCount": 8 },
+  "headings": {
+    "numberingEnabled": true,
+    "level1": { "fontSize": 10, "bold": true, "italic": false, "uppercase": true, "alignment": "left", "numbering": "arabic", "numberSeparator": " ", "spacingBeforePt": 12, "spacingAfterPt": 6 },
+    "level2": { "fontSize": 9, "bold": true, "italic": false, "alignment": "left", "numbering": "arabic_dotted", "numberSeparator": " ", "spacingBeforePt": 10, "spacingAfterPt": 4 },
+    "level3": { "fontSize": 9, "bold": false, "italic": true, "alignment": "left", "numbering": "arabic_dotted", "numberSeparator": " ", "spacingBeforePt": 8, "spacingAfterPt": 4 }
+  },
+  "references": { "headingText": "REFERENCES", "headingNumbered": false, "fontSize": 8, "hangingIndentInches": 0.25, "sortOrder": "citation_order", "labelFormat": "[{n}]", "style": "ACM" },
+  "figures": { "captionPosition": "below", "labelFormat": "Figure {n}.", "fontSize": 8, "centered": true, "maxWidthInches": 3.3 },
+  "tables": { "captionPosition": "above", "labelFormat": "Table {n}.", "fontSize": 8, "centered": true, "borderStyle": "acm", "captionBold": false, "captionItalic": false },
+  "equations": { "numbering": "parenthesized_right", "numberLabelFormat": "({n})" },
+  "pageNumbers": { "enabled": true, "position": "footer", "alignment": "center" },
+  "citationStyle": "ACM",
+  "wordsPerPage": { "singleColumn": 550, "twoColumn": 950 }
+}

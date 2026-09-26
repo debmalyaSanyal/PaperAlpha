@@ -1,0 +1,52 @@
+{
+  "id": "ieee",
+  "name": "IEEE",
+  "description": "IEEE conference/journal style: US Letter, two columns, 10pt Times New Roman, Roman-numeral section headings, bracketed numeric citations.",
+  "page": { "size": "Letter", "widthInches": 8.5, "heightInches": 11.0, "columns": 2, "columnSpacingInches": 0.2 },
+  "margins": { "top": 0.75, "bottom": 1.0, "left": 0.625, "right": 0.625 },
+  "typography": {
+    "bodyFontSize": 10,
+    "titleFontSize": 24,
+    "authorFontSize": 11,
+    "abstractFontSize": 9,
+    "lineSpacing": 1.0,
+    "paragraphSpacingAfterPt": 0,
+    "firstLineIndentInches": 0.2
+  },
+  "title": { "fontSize": 24, "alignment": "center", "textCase": "title_case" },
+  "abstract": {
+    "headingText": "Abstract",
+    "headingNumbered": false,
+    "headingBold": true,
+    "headingItalic": true,
+    "bodyBold": true,
+    "fontSize": 9,
+    "maxWords": 250
+  },
+  "keywords": { "headingText": "Index Terms", "headingInSameParagraph": true, "headingItalic": true, "headingBold": true, "maxCount": 6 },
+  "headings": {
+    "numberingEnabled": true,
+    "level1": {
+      "fontSize": 10,
+      "bold": false,
+      "italic": false,
+      "smallCaps": true,
+      "uppercase": true,
+      "alignment": "center",
+      "numbering": "roman_upper",
+      "numberSeparator": ". ",
+      "numberingSuffix": "",
+      "spacingBeforePt": 12,
+      "spacingAfterPt": 6
+    },
+    "level2": { "fontSize": 10, "bold": false, "italic": true, "alignment": "left", "numbering": "alpha_upper", "numberSeparator": ". ", "spacingBeforePt": 10, "spacingAfterPt": 4 },
+    "level3": { "fontSize": 10, "bold": false, "italic": true, "alignment": "left", "numbering": "arabic_dotted", "numberSeparator": ") ", "spacingBeforePt": 8, "spacingAfterPt": 4 }
+  },
+  "references": { "headingText": "References", "headingNumbered": false, "fontSize": 8, "hangingIndentInches": 0.25, "sortOrder": "citation_order", "labelFormat": "[{n}]", "style": "IEEE" },
+  "figures": { "captionPosition": "below", "labelFormat": "Fig. {n}.", "fontSize": 8, "centered": true, "maxWidthInches": 3.4 },
+  "tables": { "captionPosition": "above", "labelFormat": "TABLE {n}", "fontSize": 8, "centered": true, "borderStyle": "ieee", "captionBold": false, "captionItalic": false },
+  "equations": { "numbering": "parenthesized_right", "numberLabelFormat": "({n})" },
+  "pageNumbers": { "enabled": false },
+  "citationStyle": "IEEE",
+  "wordsPerPage": { "singleColumn": 550, "twoColumn": 980 }
+}

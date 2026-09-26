@@ -1,0 +1,50 @@
+{
+  "$comment": "Template for user-defined formats. Any subset of keys may be supplied; missing keys fall back to formats/_base.json. The user may instead describe the format in natural language (project.customFormat) and the formatting agent will produce a patch that is validated against CustomFormatSchema before use.",
+  "id": "custom",
+  "name": "Custom",
+  "description": "Example custom format: 12pt Times New Roman, single column, numbered headings, 1 inch margins, IEEE-style references, 6 sections, approximately 10 pages.",
+
+  "page": { "size": "A4", "widthInches": 8.27, "heightInches": 11.69, "columns": 1, "columnSpacingInches": 0.25 },
+  "margins": { "top": 1.0, "bottom": 1.0, "left": 1.0, "right": 1.0 },
+  "typography": {
+    "fontFamily": "Times New Roman",
+    "bodyFontSize": 12,
+    "titleFontSize": 16,
+    "authorFontSize": 12,
+    "abstractFontSize": 11,
+    "lineSpacing": 1.15,
+    "paragraphSpacingAfterPt": 6,
+    "firstLineIndentInches": 0.0,
+    "justify": true
+  },
+  "title": { "fontSize": 16, "bold": true, "alignment": "center", "textCase": "title_case" },
+  "authors": { "fontSize": 12, "alignment": "center", "includeAffiliations": true },
+  "abstract": { "headingText": "Abstract", "headingNumbered": false, "headingBold": true, "fontSize": 11, "justify": true, "maxWords": 250 },
+  "keywords": { "headingText": "Keywords", "headingInSameParagraph": true, "headingItalic": true, "separator": ", ", "maxCount": 6 },
+  "headings": {
+    "numberingEnabled": true,
+    "level1": { "fontSize": 13, "bold": true, "alignment": "left", "numbering": "arabic", "numberSeparator": ". ", "spacingBeforePt": 12, "spacingAfterPt": 6 },
+    "level2": { "fontSize": 12, "bold": true, "alignment": "left", "numbering": "arabic_dotted", "numberSeparator": " ", "spacingBeforePt": 10, "spacingAfterPt": 4 },
+    "level3": { "fontSize": 12, "bold": false, "italic": true, "alignment": "left", "numbering": "arabic_dotted", "numberSeparator": " ", "spacingBeforePt": 8, "spacingAfterPt": 4 }
+  },
+  "references": { "headingText": "References", "headingNumbered": false, "fontSize": 10, "hangingIndentInches": 0.25, "sortOrder": "citation_order", "labelFormat": "[{n}]", "style": "IEEE" },
+  "figures": { "captionPosition": "below", "labelFormat": "Figure {n}.", "fontSize": 10, "centered": true, "maxWidthInches": 6.0 },
+  "tables": { "captionPosition": "above", "labelFormat": "Table {n}.", "fontSize": 10, "centered": true, "borderStyle": "grid" },
+  "pageNumbers": { "enabled": true, "position": "footer", "alignment": "center" },
+  "citationStyle": "IEEE",
+  "wordsPerPage": { "singleColumn": 480, "twoColumn": 900 },
+
+  "outline": {
+    "$comment": "Optional: restrict or reorder sections for a custom '6 sections / 10 pages' requirement.",
+    "sections": [
+      { "key": "abstract", "title": "Abstract", "level": 1, "kind": "abstract", "required": true, "weight": 0.05 },
+      { "key": "keywords", "title": "Keywords", "level": 1, "kind": "keywords", "required": true, "weight": 0.0 },
+      { "key": "introduction", "title": "Introduction", "level": 1, "kind": "body", "required": true, "weight": 0.15 },
+      { "key": "related_work", "title": "Related Work", "level": 1, "kind": "body", "required": true, "weight": 0.15 },
+      { "key": "methodology", "title": "Methodology", "level": 1, "kind": "body", "required": true, "weight": 0.30 },
+      { "key": "results", "title": "Results and Discussion", "level": 1, "kind": "body", "required": true, "weight": 0.25 },
+      { "key": "conclusion", "title": "Conclusion", "level": 1, "kind": "body", "required": true, "weight": 0.10 },
+      { "key": "references", "title": "References", "level": 1, "kind": "references", "required": true, "weight": 0.0 }
+    ]
+  }
+}

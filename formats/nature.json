@@ -1,0 +1,42 @@
+{
+  "id": "nature",
+  "name": "Nature",
+  "description": "Nature research-article style: A4, single column, 10pt serif, condensed single-paragraph methods emphasis, superscript numeric citations.",
+  "page": { "size": "A4", "widthInches": 8.27, "heightInches": 11.69, "columns": 1, "columnSpacingInches": 0.25 },
+  "margins": { "top": 1.0, "bottom": 1.0, "left": 1.0, "right": 1.0 },
+  "typography": {
+    "bodyFontSize": 10,
+    "titleFontSize": 18,
+    "authorFontSize": 11,
+    "abstractFontSize": 10,
+    "lineSpacing": 1.15,
+    "paragraphSpacingAfterPt": 6,
+    "firstLineIndentInches": 0.0
+  },
+  "title": { "fontSize": 18, "bold": true, "alignment": "left", "textCase": "sentence_case" },
+  "authors": { "fontSize": 11, "alignment": "left", "includeAffiliations": true },
+  "abstract": {
+    "headingText": "Abstract",
+    "headingNumbered": false,
+    "headingBold": true,
+    "headingItalic": false,
+    "bodyBold": false,
+    "fontSize": 10,
+    "justify": true,
+    "maxWords": 200
+  },
+  "keywords": { "headingText": "Keywords", "headingInSameParagraph": true, "headingItalic": true, "headingBold": false, "separator": ", ", "maxCount": 6 },
+  "headings": {
+    "numberingEnabled": false,
+    "level1": { "fontSize": 11, "bold": true, "italic": false, "alignment": "left", "numbering": "none", "spacingBeforePt": 14, "spacingAfterPt": 6 },
+    "level2": { "fontSize": 10, "bold": false, "italic": true, "alignment": "left", "numbering": "none", "spacingBeforePt": 10, "spacingAfterPt": 4 },
+    "level3": { "fontSize": 10, "bold": false, "italic": true, "alignment": "left", "numbering": "none", "spacingBeforePt": 8, "spacingAfterPt": 4 }
+  },
+  "references": { "headingText": "References", "headingNumbered": false, "fontSize": 9, "hangingIndentInches": 0.25, "sortOrder": "citation_order", "labelFormat": "{n}.", "style": "Nature" },
+  "figures": { "captionPosition": "below", "labelFormat": "Figure {n} |", "fontSize": 8, "captionBold": true, "centered": true, "maxWidthInches": 5.8 },
+  "tables": { "captionPosition": "above", "labelFormat": "Table {n} |", "fontSize": 8, "captionBold": true, "centered": true, "borderStyle": "nature", "headerBold": true },
+  "equations": { "numbering": "parenthesized_right", "numberLabelFormat": "({n})" },
+  "pageNumbers": { "enabled": true, "position": "footer", "alignment": "center" },
+  "citationStyle": "Nature",
+  "wordsPerPage": { "singleColumn": 560, "twoColumn": 980 }
+}

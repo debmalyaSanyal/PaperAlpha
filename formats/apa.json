@@ -1,0 +1,44 @@
+{
+  "id": "apa",
+  "name": "APA",
+  "description": "APA 7th edition style: US Letter, single column, double-spaced 12pt Times New Roman, Level-1 centered bold headings, author-date (Author, year) citations.",
+  "page": { "size": "Letter", "widthInches": 8.5, "heightInches": 11.0, "columns": 1, "columnSpacingInches": 0.25 },
+  "margins": { "top": 1.0, "bottom": 1.0, "left": 1.0, "right": 1.0 },
+  "typography": {
+    "bodyFontSize": 12,
+    "titleFontSize": 12,
+    "authorFontSize": 12,
+    "abstractFontSize": 12,
+    "lineSpacing": 2.0,
+    "paragraphSpacingBeforePt": 0,
+    "paragraphSpacingAfterPt": 0,
+    "firstLineIndentInches": 0.5,
+    "justify": false
+  },
+  "title": { "fontSize": 12, "bold": true, "alignment": "center", "textCase": "title_case", "spacingAfterPt": 12 },
+  "authors": { "fontSize": 12, "alignment": "center", "includeAffiliations": true },
+  "abstract": {
+    "headingText": "Abstract",
+    "headingNumbered": false,
+    "headingBold": true,
+    "headingItalic": false,
+    "bodyBold": false,
+    "fontSize": 12,
+    "justify": false,
+    "maxWords": 250
+  },
+  "keywords": { "headingText": "Keywords", "headingInSameParagraph": false, "headingItalic": true, "headingBold": false, "separator": ", ", "maxCount": 6, "wordAfterColon": true },
+  "headings": {
+    "numberingEnabled": false,
+    "level1": { "fontSize": 12, "bold": true, "italic": false, "alignment": "center", "numbering": "none", "spacingBeforePt": 12, "spacingAfterPt": 0 },
+    "level2": { "fontSize": 12, "bold": true, "italic": false, "alignment": "left", "numbering": "none", "spacingBeforePt": 12, "spacingAfterPt": 0 },
+    "level3": { "fontSize": 12, "bold": true, "italic": true, "alignment": "left", "numbering": "none", "spacingBeforePt": 12, "spacingAfterPt": 0 }
+  },
+  "references": { "headingText": "References", "headingNumbered": false, "fontSize": 12, "hangingIndentInches": 0.5, "sortOrder": "alphabetical_author", "labelFormat": "", "style": "APA", "pageBreakBefore": true },
+  "figures": { "captionPosition": "above", "labelFormat": "Figure {n}", "fontSize": 12, "captionBold": true, "captionItalic": true, "centered": true, "maxWidthInches": 6.5 },
+  "tables": { "captionPosition": "above", "labelFormat": "Table {n}", "fontSize": 12, "captionBold": true, "captionItalic": true, "centered": true, "borderStyle": "apa", "headerBold": false },
+  "equations": { "numbering": "right_aligned", "numberLabelFormat": "({n})" },
+  "pageNumbers": { "enabled": true, "position": "header", "alignment": "right", "format": "{n}" },
+  "citationStyle": "APA",
+  "wordsPerPage": { "singleColumn": 250, "twoColumn": 700 }
+}
