@@ -3,8 +3,11 @@
   publish = ".next"
 
 [build.environment]
-  NODE_ENV = "production"
+  NODE_VERSION = "20.18.0"
   NPM_FLAGS = "--include=dev"
+  # Needed so getSessionUser() can create the demo user in production.
+  # Override in Netlify UI if you want to lock the demo down.
+  ALLOW_ANONYMOUS_DEV_USER = "true"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

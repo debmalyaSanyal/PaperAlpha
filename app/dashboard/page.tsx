@@ -1,30 +1,114 @@
 import Link from "next/link";
 import { BookOpen, FileText, PlusCircle, CheckCircle2, Clock, AlertCircle } from "lucide-react";
 
-import { requireUser } from "@/lib/auth";
+import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardPage() {
-  const user = await requireUser();
+function SetupNotice({ title, message }: { title: string; message: string }) {
+  return (
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Research Papers</h1>
+          <p className="mt-1 text-sm text-slate-500">Autonomous multi-agent research paper drafting &amp; formatting.</p>
+        </div>
+        <Link
+          href="/projects/create"
+          className="inline-flex items-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-lg shadow-sm"
+        >
+          <PlusCircle className="w-4 h-4" />
+          <span>New Paper</span>
+        </Link>
+      </div>
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+        <h2 className="font-semibold text-amber-900">{title}</h2>
+        <p className="mt-2 text-sm text-amber-800 whitespace-pre-line">{message}</p>
+        <p className="mt-3 text-xs text-amber-700">
+          Set AUTH_SECRET (≥16 chars), ALLOW_ANONYMOUS_DEV_USER=true, and DATABASE_URL in Netlify → Site
+          configuration → Environment variables, then redeploy.
+        </p>
+      </div>
+    </div>
+  );
+}
 
-  const projects = await prisma.project.findMany({
-    where: { userId: user.id },
-    orderBy: { updatedAt: "desc" },
-    include: {
-      files: { select: { id: true } },
-      sections: { select: { id: true, wordCount: true } },
-      citations: { select: { id: true } },
-      validation: true,
-      jobs: {
-        orderBy: { createdAt: "desc" },
-        take: 1,
-        select: { status: true, stage: true, progress: true },
+export default async function DashboardPage() {
+  let user: Awaited<ReturnType<typeof getSessionUser>>;
+  try {
+    user = await getSessionUser();
+  } catch (e) {
+    const msg = (e as Error)?.message ?? String(e);
+    return <SetupNotice title="Server configuration needed" message={msg} />;
+  }
+
+  if (!user) {
+    return (
+      <SetupNotice
+        title="Authentication required"
+        message="No session found and anonymous demo access is disabled. Set ALLOW_ANONYMOUS_DEV_USER=true in Netlify for a public demo, or add a login flow."
+      />
+    );
+  }
+
+  // Ephemeral fallback user (no reachable DB in production) — render shell UI
+  // instead of throwing a Digest error.
+  if (user.id === "demo-ephemeral") {
+    return (
+      <SetupNotice
+        title="Database not configured"
+        message={`Signed in as ${user.email} (ephemeral, DB unreachable).\nThis Netlify deploy has no reachable DATABASE_URL, so projects can't be listed yet. Add a Postgres DATABASE_URL (e.g. Neon/Supabase) in Netlify env vars and redeploy.`}
+      />
+    );
+  }
+
+  let projects: Array<{
+    status: string;
+    files: Array<{ id: string }>;
+    sections: Array<{ id: string; wordCount: number }>;
+    citations: Array<{ id: string }>;
+    validation: {
+      verifiedResults: boolean;
+      verifiedReferences: boolean;
+      verifiedMethodology: boolean;
+      reviewedAiContent: boolean;
+      verifiedCompliance: boolean;
+    } | null;
+    jobs: Array<{ status: string; stage: string | null; progress: number }>;
+  } & {
+    id: string;
+    title: string;
+    topic: string;
+    paperFormat: string;
+    updatedAt: Date;
+  }>;
+  try {
+    projects = await prisma.project.findMany({
+      where: { userId: user.id },
+      orderBy: { updatedAt: "desc" },
+      include: {
+        files: { select: { id: true } },
+        sections: { select: { id: true, wordCount: true } },
+        citations: { select: { id: true } },
+        validation: true,
+        jobs: {
+          orderBy: { createdAt: "desc" },
+          take: 1,
+          select: { status: true, stage: true, progress: true },
+        },
       },
-    },
-  });
+    });
+  } catch (e) {
+    const msg = (e as Error)?.message ?? String(e);
+    return (
+      <SetupNotice
+        title="Database unreachable"
+        message={`Could not load projects: ${msg}\n\nIf DATABASE_URL is still "file:./dev.db", SQLite won't work on Netlify serverless functions. Switch to Postgres (see prisma/schema.prisma header + .env.example) and set DATABASE_URL in Netlify.`}
+      />
+    );
+  }
 
   const total = projects.length;
   const generating = projects.filter((p) => p.status === "GENERATING" || p.status === "RUNNING").length;
