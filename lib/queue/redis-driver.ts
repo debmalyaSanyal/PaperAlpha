@@ -1,4 +1,3 @@
-import { createRequire } from "node:module";
 import path from "node:path";
 
 import { prisma } from "@/lib/db";
@@ -57,11 +56,14 @@ export class RedisJobQueue implements JobQueue {
   private async redis(): Promise<RedisLike> {
     if (this.client) return this.client;
     try {
-      // `ioredis` is an optional peer: resolved at runtime so that the default
-      // database driver never pulls it in, and so the dependency stays
-      // genuinely optional for local development.
-      const nodeRequire = createRequire(import.meta.url);
-      const factory = nodeRequire("ioredis") as new (url: string) => RedisLike;
+      // `ioredis` is an optional peer: loaded lazily so the default database
+      // driver never statically imports it (fixes the Netlify/Next build
+      // "Module not found: Can't resolve 'ioredis'" warning) and the
+      // dependency stays genuinely optional for local development.
+      const mod = (await new Function("u", "return import(u)")("ioredis")) as unknown as {
+        default?: new (url: string) => RedisLike;
+      } & { [k: string]: unknown };
+      const factory = (mod?.default ?? mod) as unknown as new (url: string) => RedisLike;
       this.client = new factory(this.options.url);
       return this.client;
     } catch {

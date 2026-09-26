@@ -6,6 +6,8 @@ import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 function SetupNotice({ title, message }: { title: string; message: string }) {
   return (

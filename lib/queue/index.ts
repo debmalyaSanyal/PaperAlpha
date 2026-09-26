@@ -1,6 +1,5 @@
 import { getEnv } from "@/lib/env";
 import { DbJobQueue } from "./db-driver";
-import { RedisJobQueue } from "./redis-driver";
 import type { JobQueue } from "./types";
 
 let cached: JobQueue | null = null;
@@ -17,7 +16,11 @@ export function getQueue(): JobQueue {
   const env = getEnv();
 
   if (env.QUEUE_DRIVER === "redis") {
-    cached = new RedisJobQueue({
+    // Lazy-require so `next build` never statically bundles the optional
+    // `ioredis` dependency into routes that only use the db driver.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { RedisJobQueue: RedisQueue } = require("./redis-driver") as typeof import("./redis-driver");
+    cached = new RedisQueue({
       url: env.REDIS_URL ?? "",
       queueName: env.QUEUE_NAME,
       pollIntervalMs: env.QUEUE_POLL_INTERVAL_MS,
@@ -40,4 +43,4 @@ export function resetQueueCache(): void {
 
 export * from "./types";
 export { DbJobQueue } from "./db-driver";
-export { RedisJobQueue } from "./redis-driver";
+export type { RedisJobQueue, RedisQueueOptions } from "./redis-driver";
