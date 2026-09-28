@@ -5,6 +5,8 @@
   # the embedded DDL (lib/db/schema-sqlite.ts) on first query.
   command = "npx prisma generate && npm run build"
   publish = ".next"
+  # NODE_ENV=production is embedded throughout normal Next.js build output.
+  SECRETS_SCAN_OMIT_KEYS = "NODE_ENV"
 
 [build.environment]
   NODE_VERSION = "20.18.0"
@@ -27,5 +29,4 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
 
