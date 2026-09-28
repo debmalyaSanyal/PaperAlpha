@@ -1,0 +1,17 @@
+HTTP/1.1 500 Internal Server Error
+Age: 1
+Cache-Control: private,no-cache,no-store,max-age=0,must-revalidate
+Cache-Status: "Netlify Durable"; fwd=bypass
+Cache-Status: "Netlify Edge"; fwd=miss; fwd-status=500
+Content-Type: text/html; charset=utf-8
+Date: Mon, 28 Sep 2026 15:51:09 GMT
+Netlify-Vary: query=__nextDataReq|_rsc,header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|next-router-segment-prefetch|next-router-state-tree|next-url|rsc|accept-encoding,cookie=__prerender_bypass|__next_preview_data
+Referrer-Policy: strict-origin-when-cross-origin
+Server: Netlify
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Nf-Request-Id: 01M3MBCYXXVTN9K0DKTN6SKYBM
+Transfer-Encoding: chunked
+

@@ -4,6 +4,7 @@ import path from "node:path";
 import { Prisma, PrismaClient } from "@prisma/client";
 
 import { SQLITE_SCHEMA_STATEMENTS } from "./generated/sqlite-schema";
+import { isServerlessRuntime } from "./env";
 
 /**
  * Prisma client singleton.
@@ -26,21 +27,11 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 /** True when running inside a serverless/edge host with an ephemeral FS. */
-function isServerless(): boolean {
-  return Boolean(
-    process.env.NETLIFY ||
-      process.env.NETLIFY_DEV ||
-      process.env.AWS_LAMBDA_FUNCTION_NAME ||
-      process.env.LAMBDA_TASK_ROOT ||
-      process.env.VERCEL,
-  );
-}
-
 function resolveDatabaseUrl(raw: string): string {
   const value = raw.trim() || "file:./dev.db";
   if (!value.startsWith("file:")) return value;
   // Local development keeps the repo-relative file (prisma/dev.db).
-  if (!isServerless()) return value;
+  if (!isServerlessRuntime()) return value;
   // Already absolute / already inside tmp.
   if (value.startsWith("file:/tmp/") || value.startsWith("file://")) return value;
   const filePart = value.slice("file:".length).replace(/^\.\//, "").replace(/^\//, "");

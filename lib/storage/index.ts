@@ -1,4 +1,4 @@
-import { getEnv } from "@/lib/env";
+import { getEnv, isServerlessRuntime } from "@/lib/env";
 import { LocalStorageDriver } from "./local";
 import { S3StorageDriver } from "./s3";
 import { StorageError, type StorageDriver } from "./types";
@@ -36,11 +36,23 @@ export function getStorage(): StorageDriver {
   }
 
   cached = new LocalStorageDriver(
-    env.STORAGE_LOCAL_ROOT,
+    resolveLocalRoot(env.STORAGE_LOCAL_ROOT),
     env.AUTH_SECRET || env.WORKER_SHARED_SECRET,
     env.NEXT_PUBLIC_APP_URL,
   );
   return cached;
+}
+
+/**
+ * Serverless lambdas can only write inside /tmp, so a repo-relative upload root
+ * such as `./.storage` must be relocated or every upload fails with EACCES.
+ */
+function resolveLocalRoot(configured: string): string {
+  const isRelative = !/^[a-zA-Z]:[\\/]/.test(configured) && !configured.startsWith("/") && !configured.startsWith("\\\\");
+  if (isRelative && isServerlessRuntime()) {
+    return "/tmp/paperalpha-storage";
+  }
+  return configured;
 }
 
 /** Test/dev helper: forget the memoized driver (e.g. after changing env). */

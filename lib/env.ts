@@ -98,6 +98,21 @@ export function resetEnvCache(): void {
   cached = null;
 }
 
+/**
+ * True when running inside a serverless/edge host whose filesystem is
+ * read-only except a per-invocation temp directory (Netlify functions, Vercel,
+ * AWS Lambda). Used to relocate SQLite files and local upload storage.
+ */
+export function isServerlessRuntime(): boolean {
+  return Boolean(
+    process.env.NETLIFY ||
+      process.env.NETLIFY_DEV ||
+      process.env.AWS_LAMBDA_FUNCTION_NAME ||
+      process.env.LAMBDA_TASK_ROOT ||
+      process.env.VERCEL,
+  );
+}
+
 export function allowedExtensions(): string[] {
   return getEnv()
     .ALLOWED_FILE_EXTENSIONS.split(",")
