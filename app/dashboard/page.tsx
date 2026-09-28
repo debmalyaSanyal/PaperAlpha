@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BookOpen, FileText, PlusCircle, CheckCircle2, Clock, AlertCircle } from "lucide-react";
 
 import { getSessionUser } from "@/lib/auth";
-import { prisma } from "@/lib/db";
+import { lastDbError, prisma } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -75,10 +75,14 @@ export default async function DashboardPage() {
   // Ephemeral fallback user (no reachable DB in production) — render shell UI
   // instead of throwing a Digest error.
   if (user.id === "demo-ephemeral") {
+    const dbErr = lastDbError();
+    const envUrl = process.env.DATABASE_URL ? "(set)" : "(unset)";
     return (
       <SetupNotice
         title="Database not configured"
-        message={`Signed in as ${user.email} (ephemeral, DB unreachable).\nThis Netlify deploy has no reachable DATABASE_URL, so projects can't be listed yet. Add a Postgres DATABASE_URL (e.g. Neon/Supabase) in Netlify env vars and redeploy.`}
+        message={`Signed in as ${user.email} (ephemeral, DB unreachable).\nDATABASE_URL: ${envUrl}${
+          dbErr ? `\nRuntime error: ${dbErr}` : ""
+        }\n\nThis Netlify deploy has no reachable DATABASE_URL, so projects can't be listed yet. Add a Postgres DATABASE_URL (e.g. Neon/Supabase) in Netlify env vars and redeploy.`}
       />
     );
   }

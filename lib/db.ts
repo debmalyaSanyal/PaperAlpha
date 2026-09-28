@@ -1,4 +1,4 @@
-import { mkdirSync } from "node:fs";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 import { Prisma, PrismaClient } from "@prisma/client";
@@ -24,18 +24,53 @@ import { isServerlessRuntime } from "./env";
 const globalForPrisma = globalThis as unknown as {
   __researchPaperPrisma?: PrismaClient;
   __researchPaperPrismaSchema?: Promise<void>;
+  __researchPaperPrismaError?: string;
 };
 
-/** True when running inside a serverless/edge host with an ephemeral FS. */
+/**
+ * Remember the last database failure so a page can show the real cause instead
+ * of a generic "database unreachable" message (Server Components cannot return
+ * the error to the browser otherwise).
+ */
+export function recordDbError(message: unknown): void {
+  const text = message instanceof Error ? message.message : String(message ?? "");
+  if (text) globalForPrisma.__researchPaperPrismaError = text;
+}
+
+/** Last recorded database error, or null. Shown in the dashboard notice. */
+export function lastDbError(): string | null {
+  return globalForPrisma.__researchPaperPrismaError ?? null;
+}
+
+function dirIsWritable(dir: string): boolean {
+  try {
+    mkdirSync(dir, { recursive: true });
+    const probe = path.join(dir, `.rpa-probe-${process.pid}`);
+    writeFileSync(probe, "ok");
+    rmSync(probe, { force: true });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function tempDatabaseUrl(value: string): string {
+  const base = path.basename(value.slice("file:".length)) || "app.db";
+  return `file:/tmp/${base}`;
+}
+
 function resolveDatabaseUrl(raw: string): string {
   const value = raw.trim() || "file:./dev.db";
   if (!value.startsWith("file:")) return value;
   // Local development keeps the repo-relative file (prisma/dev.db).
   if (!isServerlessRuntime()) return value;
   // Already absolute / already inside tmp.
-  if (value.startsWith("file:/tmp/") || value.startsWith("file://")) return value;
-  const filePart = value.slice("file:".length).replace(/^\.\//, "").replace(/^\//, "");
-  return `file:/tmp/${filePart}`;
+  if (value.startsWith("file://")) return value;
+  const candidate = value.startsWith("file:/") ? value : tempDatabaseUrl(value);
+  const dir = path.dirname(candidate.slice("file:".length));
+  if (dirIsWritable(dir)) return candidate;
+  // Read-only bundle directory: fall back to the writable /tmp filesystem.
+  return tempDatabaseUrl(value);
 }
 
 function clientOptions(url: string): Prisma.PrismaClientOptions {
@@ -100,6 +135,7 @@ export function ensureDbReady(): Promise<void> {
     const url = process.env.DATABASE_URL ?? "";
     globalForPrisma.__researchPaperPrismaSchema = initializeSqliteSchema(client, url).catch((error) => {
       globalForPrisma.__researchPaperPrismaSchema = undefined;
+      recordDbError(error);
       console.warn("[db] schema bootstrap failed:", (error as Error)?.message ?? error);
     });
   }

@@ -4,6 +4,19 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   serverExternalPackages: ["@prisma/client", "prisma", "ioredis"],
+  // Serverless functions start with an empty /tmp and a read-only bundle. The
+  // SQLite tables are created at runtime from the embedded DDL (lib/db.ts), so
+  // the Prisma engine + generated client must be traced into the function
+  // bundle for every route that touches the database - otherwise queries fail
+  // with "Query engine library for current platform could not be found".
+  outputFileTracingIncludes: {
+    "/**/*": [
+      "./node_modules/.prisma/client/**/*",
+      "./node_modules/@prisma/client/**/*",
+      "./node_modules/@prisma/engines/**/*",
+      "./prisma/schema.prisma",
+    ],
+  },
   experimental: {
     // Uploaded research material (notebooks, PDFs, datasets) is posted to
     // route handlers via multipart/form-data.

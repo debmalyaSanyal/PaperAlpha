@@ -2,7 +2,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 
 import { cookies } from "next/headers";
 
-import { prisma } from "./db";
+import { prisma, recordDbError } from "./db";
 import { getEnv } from "./env";
 
 /**
@@ -149,6 +149,7 @@ export async function getSessionUser(): Promise<AuthUser | null> {
       if (typeof console !== "undefined") {
         console.warn("[auth] DB unreachable, using ephemeral demo user:", (dbError as Error)?.message);
       }
+      recordDbError(dbError);
       return {
         id: "demo-ephemeral",
         email: DEV_USER_EMAIL,

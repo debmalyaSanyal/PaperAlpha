@@ -10,6 +10,11 @@
 
 generator client {
   provider = "prisma-client-js"
+  // Netlify builds run on Ubuntu but functions execute on AWS Lambda
+  // (rhel-openssl-3.0.x). Without this, `prisma generate` only emits the
+  // build-machine engine and every query fails at runtime with
+  // "Query engine library for current platform could not be found".
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
