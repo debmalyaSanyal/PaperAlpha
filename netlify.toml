@@ -5,6 +5,12 @@
   # the embedded DDL (lib/db/schema-sqlite.ts) on first query.
   command = "npx prisma generate && npm run build"
   publish = ".next"
+  # DATABASE_URL and STORAGE_LOCAL_ROOT below are plain /tmp paths, not
+  # credentials - no host, user, or password is present. Netlify's secret
+  # scanner still flags them because their literal values are reused as
+  # fallback defaults in lib/db.ts and lib/storage/index.ts, so they are
+  # exempted from scanning here rather than removing the (non-secret) values.
+  SECRETS_SCAN_OMIT_KEYS = ["DATABASE_URL", "STORAGE_LOCAL_ROOT"]
 
 [build.environment]
   NODE_VERSION = "20.18.0"
