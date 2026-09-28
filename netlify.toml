@@ -1,4 +1,8 @@
 [build]
+  # No `prisma db push` here: the lambda filesystem is read-only except /tmp and
+  # /tmp is wiped between cold starts, so a SQLite file created at build time
+  # would not exist at request time. lib/db.ts instead creates the tables from
+  # the embedded DDL (lib/db/schema-sqlite.ts) on first query.
   command = "npx prisma generate && npm run build"
   publish = ".next"
 
@@ -8,7 +12,20 @@
   # Needed so getSessionUser() can create the demo user in production.
   # Override in Netlify UI if you want to lock the demo down.
   ALLOW_ANONYMOUS_DEV_USER = "true"
+  # Serverless lambdas can only write inside /tmp. Data written there is
+  # EPHEMERAL (wiped between cold starts) - the site works, but projects are not
+  # durable. For persistence set DATABASE_URL to a Postgres connection string
+  # (Neon/Supabase) in the Netlify UI and change the datasource provider in
+  # prisma/schema.prisma to "postgresql".
+  DATABASE_URL = "file:/tmp/paperalpha-prod.db"
+  # Netlify serverless filesystem is read-only except /tmp - local uploads
+  # (STORAGE_DRIVER=local) must live there.
+  STORAGE_LOCAL_ROOT = "/tmp/paperalpha-storage"
+  # AUTH_SECRET is intentionally NOT committed. Set a 32+ char random string in
+  # the Netlify UI; lib/auth.ts falls back to an ephemeral secret with a warning
+  # so the deploy never crashes with a Digest because of a missing session key.
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
 

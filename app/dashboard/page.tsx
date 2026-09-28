@@ -10,6 +10,7 @@ export const revalidate = 0;
 export const fetchCache = "force-no-store";
 
 function SetupNotice({ title, message }: { title: string; message: string }) {
+  const isDbIssue = /database|DATABASE_URL|postgres|sqlite|prisma/i.test(`${title} ${message}`);
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-6">
@@ -28,10 +29,26 @@ function SetupNotice({ title, message }: { title: string; message: string }) {
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
         <h2 className="font-semibold text-amber-900">{title}</h2>
         <p className="mt-2 text-sm text-amber-800 whitespace-pre-line">{message}</p>
-        <p className="mt-3 text-xs text-amber-700">
-          Set AUTH_SECRET (≥16 chars), ALLOW_ANONYMOUS_DEV_USER=true, and DATABASE_URL in Netlify → Site
-          configuration → Environment variables, then redeploy.
-        </p>
+        {isDbIssue ? (
+          <div className="mt-4 rounded-lg bg-white/70 border border-amber-200 p-4 text-xs text-amber-900 space-y-2">
+            <p className="font-semibold">How to make this production site fully work (persistent data)</p>
+            <ol className="list-decimal ml-4 space-y-1">
+              <li>Create a free Postgres DB (Neon https://neon.tech or Supabase https://supabase.com) and copy its connection string.</li>
+              <li>In Netlify → Site configuration → Environment variables, set DATABASE_URL to postgresql://... and AUTH_SECRET to a 32+ char random string.</li>
+              <li>In prisma/schema.prisma change datasource provider to &quot;postgresql&quot;, run npx prisma generate, commit, and redeploy. Then run npx prisma db push once against that DATABASE_URL to create tables.</li>
+            </ol>
+            <p>
+              Why: this repo ships SQLite (file:./dev.db). Netlify serverless functions have a read-only
+              filesystem (only /tmp is writable, and it is wiped between invocations), so SQLite can
+              never persist there — projects/files created on the live site would vanish.
+            </p>
+          </div>
+        ) : (
+          <p className="mt-3 text-xs text-amber-700">
+            Set AUTH_SECRET (≥16 chars), ALLOW_ANONYMOUS_DEV_USER=true, and DATABASE_URL in Netlify → Site
+            configuration → Environment variables, then redeploy.
+          </p>
+        )}
       </div>
     </div>
   );
