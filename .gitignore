@@ -53,3 +53,9 @@ Thumbs.db
 *.log
 coverage/
 .vitest/
+
+# local deployment debug artifacts (scratch HTML dumps, sim scripts)
+/live-*.html
+/dash-out.html
+/netlify-sim*.log
+scripts/_sim-netlify.cmd

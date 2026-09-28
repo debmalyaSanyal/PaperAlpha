@@ -1,7 +1,7 @@
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-import { Prisma, PrismaClient } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 
 import { SQLITE_SCHEMA_STATEMENTS } from "./generated/sqlite-schema";
 import { isServerlessRuntime } from "./env";
@@ -73,6 +73,37 @@ function resolveDatabaseUrl(raw: string): string {
   return tempDatabaseUrl(value);
 }
 
+/**
+ * Load the generated Prisma client lazily.
+ *
+ * The import is intentionally deferred to first use: a static
+ * `import { PrismaClient } from "@prisma/client"` is evaluated while the
+ * Server Component module is being loaded, i.e. *before* the component body
+ * runs. If the engine binary or generated client is missing from the lambda
+ * bundle, that static import throws a module-evaluation error which no
+ * try/catch inside the page can intercept - it surfaces as a bare
+ * "Application error: a server-side exception has occurred (Digest: ...)".
+ * Resolving it through require() moves the failure into the query path where
+ * it is recorded and rendered as a helpful notice instead.
+ */
+function loadPrismaClientCtor(): new (options?: Prisma.PrismaClientOptions) => PrismaClient {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const mod = require("@prisma/client") as typeof import("@prisma/client");
+    if (typeof mod.PrismaClient !== "function") {
+      throw new Error("@prisma/client resolved but does not export a PrismaClient constructor");
+    }
+    return mod.PrismaClient;
+  } catch (error) {
+    const message = (error as Error)?.message ?? String(error);
+    recordDbError(
+      `Could not load @prisma/client: ${message}. This usually means the generated Prisma ` +
+        `client or the query engine binary was not deployed to the function bundle.`,
+    );
+    throw error;
+  }
+}
+
 function clientOptions(url: string): Prisma.PrismaClientOptions {
   return {
     datasourceUrl: url,
@@ -88,7 +119,8 @@ function getRawClient(): PrismaClient {
     const url = resolveDatabaseUrl(process.env.DATABASE_URL ?? "");
     // Keep process.env in sync so the prisma CLI and logs see the same path.
     process.env.DATABASE_URL = url;
-    globalForPrisma.__researchPaperPrisma = new PrismaClient(clientOptions(url));
+    const PrismaClientCtor = loadPrismaClientCtor();
+    globalForPrisma.__researchPaperPrisma = new PrismaClientCtor(clientOptions(url));
   }
   return globalForPrisma.__researchPaperPrisma;
 }
