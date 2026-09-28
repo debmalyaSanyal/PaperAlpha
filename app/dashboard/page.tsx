@@ -55,6 +55,25 @@ function SetupNotice({ title, message }: { title: string; message: string }) {
 }
 
 export default async function DashboardPage() {
+  try {
+    return await renderDashboard();
+  } catch (error) {
+    // Last-resort guard. React renders the returned tree after this component
+    // resolves, so a throw during rendering (or during module evaluation of an
+    // import chain) would otherwise escape as an opaque
+    // "Application error: a server-side exception has occurred (Digest: ...)".
+    const message = (error as Error)?.message ?? String(error);
+    const stack = String((error as Error)?.stack ?? "").split("\n").slice(0, 8).join("\n");
+    return (
+      <SetupNotice
+        title="Dashboard failed to render"
+        message={`${message}\n\n${stack}\n\nIf this mentions the Prisma engine or a missing module, the function bundle is incomplete - see /api/diag for a full environment report.`}
+      />
+    );
+  }
+}
+
+async function renderDashboard() {
   let user: Awaited<ReturnType<typeof getSessionUser>>;
   try {
     user = await getSessionUser();
