@@ -47,7 +47,6 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "5.16.0",
     "tsx": "4.23.15",
     "vitest": "3.2.7"
   },
