@@ -1,9 +1,10 @@
 [build]
   command = "npm run build"
   publish = ".next"
+  # NODE_ENV=production is embedded throughout normal Next.js build output.
+  SECRETS_SCAN_OMIT_KEYS = "NODE_ENV"
 
 [build.environment]
   NODE_VERSION = "24"
   NPM_FLAGS = "--include=dev"
-
 
