@@ -1,8 +1,24 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+type ClassValue =
+  | string
+  | number
+  | false
+  | null
+  | undefined
+  | ClassValue[]
+  | Record<string, boolean | null | undefined>;
 
 export function cn(...inputs: ClassValue[]): string {
-  return twMerge(clsx(inputs));
+  return inputs
+    .flatMap((input): string[] => {
+      if (!input) return [];
+      if (typeof input === "string" || typeof input === "number") return [String(input)];
+      if (Array.isArray(input)) return [cn(...input)];
+      return Object.entries(input)
+        .filter(([, enabled]) => Boolean(enabled))
+        .map(([className]) => className);
+    })
+    .filter(Boolean)
+    .join(" ");
 }
 
 /** Count words the way a document word-count does (whitespace separated tokens). */

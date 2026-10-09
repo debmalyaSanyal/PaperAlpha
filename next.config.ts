@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  distDir: "paperalpha-build",
   reactStrictMode: true,
   poweredByHeader: false,
   experimental: {
