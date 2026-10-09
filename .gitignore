@@ -5,6 +5,7 @@ node_modules/
 
 # next.js
 /.next/
+/paperalpha-build/
 /out/
 next-env.d.ts
 *.tsbuildinfo
@@ -56,6 +57,7 @@ coverage/
 
 # local deployment debug artifacts (scratch HTML dumps, sim scripts)
 /live-*.html
+/live-*.json
 /dash-out.html
 /netlify-sim*.log
 scripts/_sim-netlify.cmd

@@ -1,57 +1,36 @@
 {
-  "name": "researchpaper-agent",
+  "name": "paperalpha",
   "version": "0.1.0",
   "private": true,
-  "description": "ResearchPaper Agent - AI research paper generation agent (multi-stage agent pipeline, literature search, citation manager, DOCX generator)",
+  "description": "PaperAlpha - zero-budget AI-assisted research paper generation MVP",
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:generate": "prisma generate",
-    "db:sql": "prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script --output prisma/schema.sql && node scripts/embed-sqlite-schema.mjs",
-    "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio",
-    "backend:install": "python -m pip install -r backend/requirements.txt",
-    "backend:dev": "python -m uvicorn backend.app.main:app --reload --port 8000",
-    "backend:test": "python -m pytest backend/tests -q",
-    "test:all": "npm run test && npm run backend:test",
+    "test:all": "npm run typecheck && npm run test && npm run build",
     "verify": "npm run typecheck && npm run test && npm run build"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
   },
   "engines": {
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@prisma/client": "6.19.3",
     "@tailwindcss/postcss": "4.1.18",
     "@types/node": "22.20.4",
     "@types/react": "19.1.17",
     "@types/react-dom": "19.1.11",
-    "class-variance-authority": "0.7.1",
-    "clsx": "2.1.1",
     "lucide-react": "1.48.0",
     "next": "15.5.26",
     "postcss": "8.5.28",
-    "prisma": "6.19.3",
     "react": "19.1.9",
     "react-dom": "19.1.9",
-    "tailwind-merge": "3.7.0",
     "tailwindcss": "4.1.18",
-    "typescript": "5.9.3",
-    "zod": "3.25.76"
+    "typescript": "5.9.3"
   },
   "devDependencies": {
     "tsx": "4.23.15",
     "vitest": "3.2.7"
-  },
-  "optionalDependencies": {
-    "@aws-sdk/client-s3": "3.1141.0",
-    "@aws-sdk/s3-request-presigner": "3.1141.0"
   }
 }
