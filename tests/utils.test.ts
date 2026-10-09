@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { PRESET_NAMES, resolveProjectFormat } from "@/lib/formats/registry";
 import { analyzeCsv } from "@/lib/analysis/csv";
 import { buildCitations } from "@/lib/citations/manager";
-import { createDocx } from "@/lib/export/docx";
+import { buildDocumentXml, createDocx } from "@/lib/export/docx";
 import { CrossrefProvider, OpenAlexProvider } from "@/lib/literature/providers";
 import { parseNotebook } from "@/lib/parsing/notebook";
 import { analyzePythonCode } from "@/lib/parsing/python";
@@ -107,6 +107,23 @@ describe("PaperAlpha MVP utilities", () => {
     const docx = createDocx(paper);
     expect(docx.subarray(0, 2).toString()).toBe("PK");
     expect(docx.length).toBeGreaterThan(500);
+  });
+
+  it("removes XML-invalid control characters from DOCX content", () => {
+    const paper: GeneratedPaper = {
+      title: "Demo Paper",
+      abstract: "Abstract with terminal control \u001b[?25l\u001b[?25hdone and <escaped> text",
+      keywords: ["demo"],
+      sections: [{ key: "intro", title: "Introduction", content: "Content", citations: [], warnings: [], editable: true }],
+      references: [],
+      citations: [],
+      tables: [],
+      figures: [],
+      generatedBy: "MockAIProvider",
+    };
+    const xml = buildDocumentXml(paper);
+    expect(xml).not.toContain("\u001b");
+    expect(xml).toContain("&lt;escaped&gt;");
   });
 
   it("reports quality warnings for placeholders and missing references", () => {
